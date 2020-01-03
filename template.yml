@@ -1,0 +1,3375 @@
+Resources:
+  FriendsTableDB27419B:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TableName: friends
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/FriendsTable/Resource
+  initDBResourceF78B603A:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: putItem
+        parameters:
+          TableName: friends
+          Item:
+            id:
+              S: 687eb824-a9d2-464b-a379-26b2913fb5b5
+            firstName:
+              S: Demarco
+            lastName:
+              S: Rice
+            shoeSize:
+              "N": 9.600000000000001
+            favoriteColor:
+              S: violet
+        physicalResourceId: initDBResource
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResource/Resource/Default
+  AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource
+  AWS679f53fac002430cb0da5b7982bd2287ServiceRoleDefaultPolicyD28E1A5E:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: dynamodb:PutItem
+            Effect: Allow
+            Resource: "*"
+          - Action: dynamodb:BatchWriteItem
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleDefaultPolicyD28E1A5E
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/DefaultPolicy/Resource
+  AWS679f53fac002430cb0da5b7982bd22872D164C4C:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Ref: AssetParameters3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413S3Bucket9D38CF31
+        S3Key:
+          Fn::Join:
+            - ""
+            - - Fn::Select:
+                  - 0
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413S3VersionKeyBA9C6356
+              - Fn::Select:
+                  - 1
+                  - Fn::Split:
+                      - "||"
+                      - Ref: AssetParameters3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413S3VersionKeyBA9C6356
+      Handler: index.handler
+      Role:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+          - Arn
+      Runtime: nodejs12.x
+      Timeout: 30
+    DependsOn:
+      - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleDefaultPolicyD28E1A5E
+      - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/AWS679f53fac002430cb0da5b7982bd2287/Resource
+      aws:asset:path: asset.3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413
+      aws:asset:property: Code
+  initDBResourceBatch0441C9A31:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7d7a175d-4f43-433b-8d64-3a0d82a95596
+                    firstName:
+                      S: Kody
+                    lastName:
+                      S: Bashirian
+                    shoeSize:
+                      "N": 17.2
+                    favoriteColor:
+                      S: fuchsia
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ae1b99f3-036f-41c8-b8fc-028206e465ed
+                    firstName:
+                      S: Emilia
+                    lastName:
+                      S: Will
+                    shoeSize:
+                      "N": 16
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 9af84c6c-112b-4f5c-8435-18f4d263c062
+                    firstName:
+                      S: Jeanette
+                    lastName:
+                      S: Schimmel
+                    shoeSize:
+                      "N": 14.200000000000001
+                    favoriteColor:
+                      S: azure
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2fa4698c-74d4-415f-b14c-3fe588957e6b
+                    firstName:
+                      S: Talon
+                    lastName:
+                      S: Lynch
+                    shoeSize:
+                      "N": 7.4
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 61d00281-9c51-446d-a4da-ffb1c37afdda
+                    firstName:
+                      S: Leann
+                    lastName:
+                      S: Rodriguez
+                    shoeSize:
+                      "N": 4.6000000000000005
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: fde3926c-4261-49f9-b2f8-f4a47d2ae670
+                    firstName:
+                      S: Leola
+                    lastName:
+                      S: Waelchi
+                    shoeSize:
+                      "N": 3.8000000000000003
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7c8479c0-ce3c-4e61-861e-4beef6a2028a
+                    firstName:
+                      S: Caterina
+                    lastName:
+                      S: Boyer
+                    shoeSize:
+                      "N": 18.900000000000002
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2ee18e0b-6a76-4537-b92f-2f398e7f67da
+                    firstName:
+                      S: Felicita
+                    lastName:
+                      S: Ernser
+                    shoeSize:
+                      "N": 14.100000000000001
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7b4ca4d8-b9a6-4104-a5e9-a78ebf5211fc
+                    firstName:
+                      S: Samir
+                    lastName:
+                      S: Nicolas
+                    shoeSize:
+                      "N": 18.900000000000002
+                    favoriteColor:
+                      S: fuchsia
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f80eda1b-28bc-4902-99cf-917671f15a8e
+                    firstName:
+                      S: Sarina
+                    lastName:
+                      S: Little
+                    shoeSize:
+                      "N": 16.3
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c23ad041-8658-4d7d-9db8-bfb7a3b163e8
+                    firstName:
+                      S: Carolanne
+                    lastName:
+                      S: Jacobs
+                    shoeSize:
+                      "N": 2.4000000000000004
+                    favoriteColor:
+                      S: blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3971bce6-f2da-4528-aa6d-0c60a2a44197
+                    firstName:
+                      S: Marisa
+                    lastName:
+                      S: Jacobi
+                    shoeSize:
+                      "N": 3.5
+                    favoriteColor:
+                      S: ivory
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7882e860-d8d9-4475-8b76-d47f72e35883
+                    firstName:
+                      S: Keshaun
+                    lastName:
+                      S: Wintheiser
+                    shoeSize:
+                      "N": 5
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 99f25685-4d6f-4a68-82fc-af71f3268d2c
+                    firstName:
+                      S: Sonia
+                    lastName:
+                      S: Pollich
+                    shoeSize:
+                      "N": 22
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c3c936e7-07cc-4cb0-9349-7187e64eeba2
+                    firstName:
+                      S: Julian
+                    lastName:
+                      S: Brakus
+                    shoeSize:
+                      "N": 20.900000000000002
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b0ea4744-b538-4366-8382-a310498146d8
+                    firstName:
+                      S: Leanne
+                    lastName:
+                      S: Wolf
+                    shoeSize:
+                      "N": 1.4000000000000001
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d03a9153-4ff0-4465-8ce5-dc4182d898fd
+                    firstName:
+                      S: Retta
+                    lastName:
+                      S: Koepp
+                    shoeSize:
+                      "N": 12.700000000000001
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 40557cf7-e3eb-418f-83ba-00cb9b134985
+                    firstName:
+                      S: Urban
+                    lastName:
+                      S: Deckow
+                    shoeSize:
+                      "N": 4.7
+                    favoriteColor:
+                      S: azure
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 12aa8ab3-5eb6-4afa-ab06-a6bab459da77
+                    firstName:
+                      S: Judah
+                    lastName:
+                      S: Witting
+                    shoeSize:
+                      "N": 23.3
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 99d6b650-c6a0-4af8-b15f-ac8da6a23a3a
+                    firstName:
+                      S: Jeffry
+                    lastName:
+                      S: Raynor
+                    shoeSize:
+                      "N": 20.700000000000003
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a218f6ef-0f7e-49ad-be29-2e2b4b17304f
+                    firstName:
+                      S: Jenifer
+                    lastName:
+                      S: Gusikowski
+                    shoeSize:
+                      "N": 2
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7bc04bd7-8ad1-498a-8589-c80063d5ccd6
+                    firstName:
+                      S: Janiya
+                    lastName:
+                      S: Runolfsdottir
+                    shoeSize:
+                      "N": 8.4
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b07b096e-c88d-411b-987f-5c0c005741f4
+                    firstName:
+                      S: Dennis
+                    lastName:
+                      S: Anderson
+                    shoeSize:
+                      "N": 16.7
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 42c1f376-3678-4662-9bec-033a464709dd
+                    firstName:
+                      S: Arvel
+                    lastName:
+                      S: Larkin
+                    shoeSize:
+                      "N": 23.400000000000002
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7cf7aeb5-938d-48ed-9706-45d020fe8c7c
+                    firstName:
+                      S: Forest
+                    lastName:
+                      S: Hamill
+                    shoeSize:
+                      "N": 14.700000000000001
+                    favoriteColor:
+                      S: mint green
+        physicalResourceId: initDBResourceBatch0
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch0/Resource/Default
+  initDBResourceBatch107504D9A:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e7870e54-33c9-49f6-bc22-a4d36c4ae93d
+                    firstName:
+                      S: Kurtis
+                    lastName:
+                      S: Weimann
+                    shoeSize:
+                      "N": 21.200000000000003
+                    favoriteColor:
+                      S: turquoise
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5c1dc2e6-0b8c-4fe3-bd5c-27456b2ec924
+                    firstName:
+                      S: Derick
+                    lastName:
+                      S: Homenick
+                    shoeSize:
+                      "N": 10.9
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3bb5cd44-4d0b-4b13-b814-19fd8624bf04
+                    firstName:
+                      S: Caleigh
+                    lastName:
+                      S: Pagac
+                    shoeSize:
+                      "N": 3.5
+                    favoriteColor:
+                      S: mint green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 9329c1df-5dd9-4d13-beae-794a9814fc5e
+                    firstName:
+                      S: Sigrid
+                    lastName:
+                      S: Brakus
+                    shoeSize:
+                      "N": 3.1
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 47813041-c8f0-4cf6-bb58-85d4a13c2425
+                    firstName:
+                      S: Lenny
+                    lastName:
+                      S: Beer
+                    shoeSize:
+                      "N": 24.1
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 799cfa72-326a-4780-9b9a-ce908d3ed954
+                    firstName:
+                      S: Clovis
+                    lastName:
+                      S: Koss
+                    shoeSize:
+                      "N": 16.6
+                    favoriteColor:
+                      S: fuchsia
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 889bb4a9-8138-4cba-b2b4-17d7a94cb417
+                    firstName:
+                      S: Khalid
+                    lastName:
+                      S: Hintz
+                    shoeSize:
+                      "N": 5.5
+                    favoriteColor:
+                      S: magenta
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0dc11b28-939a-483f-9d98-dce97c0406bd
+                    firstName:
+                      S: Cloyd
+                    lastName:
+                      S: Altenwerth
+                    shoeSize:
+                      "N": 12.600000000000001
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6377c90a-b800-494c-83ca-23c022b14d2a
+                    firstName:
+                      S: Clotilde
+                    lastName:
+                      S: Quigley
+                    shoeSize:
+                      "N": 5.5
+                    favoriteColor:
+                      S: mint green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: daa9cba6-76e7-4630-a5db-50b65658677e
+                    firstName:
+                      S: Allene
+                    lastName:
+                      S: Franecki
+                    shoeSize:
+                      "N": 21.3
+                    favoriteColor:
+                      S: lavender
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 187a245c-e55b-45a9-bc4b-e0822a613b7e
+                    firstName:
+                      S: Alverta
+                    lastName:
+                      S: Lowe
+                    shoeSize:
+                      "N": 16.8
+                    favoriteColor:
+                      S: ivory
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 586ae3c5-a1ae-4bdc-a078-98bdb7cdddaa
+                    firstName:
+                      S: Lisandro
+                    lastName:
+                      S: Bins
+                    shoeSize:
+                      "N": 14.3
+                    favoriteColor:
+                      S: mint green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5395c2bf-5996-40d0-96de-1058724a5235
+                    firstName:
+                      S: Ebony
+                    lastName:
+                      S: Hoeger
+                    shoeSize:
+                      "N": 24.200000000000003
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a5734a92-a237-40c5-8295-bf1ae7410238
+                    firstName:
+                      S: Alverta
+                    lastName:
+                      S: Sipes
+                    shoeSize:
+                      "N": 7.2
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f9c36231-1bd6-4eeb-830a-1e841e8855cc
+                    firstName:
+                      S: Alisa
+                    lastName:
+                      S: Mayer
+                    shoeSize:
+                      "N": 16.3
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 850b5bd7-be38-4e5a-99ed-9bc98ef38e3c
+                    firstName:
+                      S: Maggie
+                    lastName:
+                      S: Schmidt
+                    shoeSize:
+                      "N": 7.4
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4d307256-2a1b-4ae6-8e04-2cb67f2d8017
+                    firstName:
+                      S: Manuel
+                    lastName:
+                      S: Pacocha
+                    shoeSize:
+                      "N": 8.4
+                    favoriteColor:
+                      S: green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a0870536-0dbf-4dca-8696-5cf266f42dcf
+                    firstName:
+                      S: Jordyn
+                    lastName:
+                      S: Streich
+                    shoeSize:
+                      "N": 6.300000000000001
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8830d25e-332e-41e5-b321-da091524335e
+                    firstName:
+                      S: Vida
+                    lastName:
+                      S: Morissette
+                    shoeSize:
+                      "N": 11.100000000000001
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c2b2070c-db2a-4e81-be19-96d2d8308fb6
+                    firstName:
+                      S: Julius
+                    lastName:
+                      S: Tromp
+                    shoeSize:
+                      "N": 10.700000000000001
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 9889f6a9-a7c5-445b-bf35-06ba13fbcc68
+                    firstName:
+                      S: Cody
+                    lastName:
+                      S: Torp
+                    shoeSize:
+                      "N": 16
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 1c8c7822-bf21-458f-ab38-448403b13a38
+                    firstName:
+                      S: Hollis
+                    lastName:
+                      S: Rau
+                    shoeSize:
+                      "N": 7.4
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e9ccd85e-60a3-4a39-a522-7c5c639a39e0
+                    firstName:
+                      S: Margret
+                    lastName:
+                      S: Yundt
+                    shoeSize:
+                      "N": 23.700000000000003
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8850e20b-8711-4c6b-b080-14c5732a9632
+                    firstName:
+                      S: Deanna
+                    lastName:
+                      S: Brekke
+                    shoeSize:
+                      "N": 1.9000000000000001
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c1cc28f3-1c65-4182-b372-345acb8befa5
+                    firstName:
+                      S: Brionna
+                    lastName:
+                      S: Cruickshank
+                    shoeSize:
+                      "N": 12.600000000000001
+                    favoriteColor:
+                      S: salmon
+        physicalResourceId: initDBResourceBatch1
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch1/Resource/Default
+  initDBResourceBatch2533B80AE:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: dd644062-edb6-4d78-9030-84f5a918c9ab
+                    firstName:
+                      S: Palma
+                    lastName:
+                      S: Hackett
+                    shoeSize:
+                      "N": 16.8
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 061e33de-f091-4d4a-9f0f-df7e4bf6d7da
+                    firstName:
+                      S: Misael
+                    lastName:
+                      S: Raynor
+                    shoeSize:
+                      "N": 19
+                    favoriteColor:
+                      S: azure
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b281c1dd-c9d2-4c73-a6e7-ade980233a0a
+                    firstName:
+                      S: Josefa
+                    lastName:
+                      S: Wyman
+                    shoeSize:
+                      "N": 17.900000000000002
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f5143fef-7623-47c9-b312-0f40a40a331f
+                    firstName:
+                      S: Morris
+                    lastName:
+                      S: Howell
+                    shoeSize:
+                      "N": 23.1
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: dfb33ebe-b1ea-40ec-83d7-ccacd899d529
+                    firstName:
+                      S: Nannie
+                    lastName:
+                      S: Mayer
+                    shoeSize:
+                      "N": 6.4
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2c22d7e9-c5de-4303-a0d1-553addac5da3
+                    firstName:
+                      S: Lia
+                    lastName:
+                      S: Gottlieb
+                    shoeSize:
+                      "N": 7
+                    favoriteColor:
+                      S: mint green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8a37d295-e869-4255-b833-d8d1af2e7783
+                    firstName:
+                      S: Elbert
+                    lastName:
+                      S: Rutherford
+                    shoeSize:
+                      "N": 13.9
+                    favoriteColor:
+                      S: plum
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 720d3922-b35a-4ad0-b521-766c2ba90f88
+                    firstName:
+                      S: Tamia
+                    lastName:
+                      S: Mraz
+                    shoeSize:
+                      "N": 5.1000000000000005
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c9f8e6b7-1918-4e5f-ba58-1960f9c89264
+                    firstName:
+                      S: Lizeth
+                    lastName:
+                      S: Robel
+                    shoeSize:
+                      "N": 14.5
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 46f26a3f-aed0-47ec-a291-9631c0277456
+                    firstName:
+                      S: Deangelo
+                    lastName:
+                      S: Friesen
+                    shoeSize:
+                      "N": 2
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a12f0f57-a2b9-405d-bbc6-cb0b3295e5ff
+                    firstName:
+                      S: Aubrey
+                    lastName:
+                      S: Fahey
+                    shoeSize:
+                      "N": 5.1000000000000005
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8ae29230-cd73-4e20-8c1a-9d6322fc437b
+                    firstName:
+                      S: Madisyn
+                    lastName:
+                      S: Littel
+                    shoeSize:
+                      "N": 4.9
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: bac995f3-14b8-41e7-8871-833055a9e449
+                    firstName:
+                      S: Bella
+                    lastName:
+                      S: Emmerich
+                    shoeSize:
+                      "N": 9.200000000000001
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 9280813f-c97b-4427-b0d3-182806852981
+                    firstName:
+                      S: Austyn
+                    lastName:
+                      S: Towne
+                    shoeSize:
+                      "N": 17.3
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8a86076d-5d35-488b-b2aa-b8b43b1c6818
+                    firstName:
+                      S: Kamron
+                    lastName:
+                      S: Welch
+                    shoeSize:
+                      "N": 24.6
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d6321048-4f32-4637-89c2-112f4b281a19
+                    firstName:
+                      S: Lynn
+                    lastName:
+                      S: Wilkinson
+                    shoeSize:
+                      "N": 11.100000000000001
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 06230332-d8a4-45bf-8008-299463d3fde4
+                    firstName:
+                      S: Imelda
+                    lastName:
+                      S: Koelpin
+                    shoeSize:
+                      "N": 10
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7c0baa5d-cc54-4eed-b6ea-91b290790a0c
+                    firstName:
+                      S: Magdalen
+                    lastName:
+                      S: Rempel
+                    shoeSize:
+                      "N": 9.9
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: fa90c566-673d-4c9d-ab2b-b263d44523f0
+                    firstName:
+                      S: Lindsay
+                    lastName:
+                      S: Oberbrunner
+                    shoeSize:
+                      "N": 23.400000000000002
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f61387e1-ead1-413b-9769-29a0a6694433
+                    firstName:
+                      S: Marisa
+                    lastName:
+                      S: Lockman
+                    shoeSize:
+                      "N": 13.9
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 86ed5cb8-23b8-41f4-8242-b9e03a2734a4
+                    firstName:
+                      S: Moses
+                    lastName:
+                      S: McDermott
+                    shoeSize:
+                      "N": 2.3000000000000003
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a4a4ecdd-39ab-4337-9647-69fc0da68c41
+                    firstName:
+                      S: Bethany
+                    lastName:
+                      S: Lakin
+                    shoeSize:
+                      "N": 19.6
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c47b6e39-2555-4aea-91e4-15150665fe1d
+                    firstName:
+                      S: Oswaldo
+                    lastName:
+                      S: McGlynn
+                    shoeSize:
+                      "N": 7.6000000000000005
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6d89b760-52c8-4c02-b73e-70f90648e4f0
+                    firstName:
+                      S: Garrett
+                    lastName:
+                      S: Hills
+                    shoeSize:
+                      "N": 6.2
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e2f3147d-ad52-4168-bf0a-f9301cf65133
+                    firstName:
+                      S: Marian
+                    lastName:
+                      S: Pfannerstill
+                    shoeSize:
+                      "N": 17
+                    favoriteColor:
+                      S: lavender
+        physicalResourceId: initDBResourceBatch2
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch2/Resource/Default
+  initDBResourceBatch3C53F7281:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 63389c97-077c-4a8d-83fb-2a0365cefaa9
+                    firstName:
+                      S: Roslyn
+                    lastName:
+                      S: Tillman
+                    shoeSize:
+                      "N": 1.3
+                    favoriteColor:
+                      S: mint green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d5a84a38-564e-4f7c-ae7a-af370b4c1f0f
+                    firstName:
+                      S: Concepcion
+                    lastName:
+                      S: Beahan
+                    shoeSize:
+                      "N": 2.1
+                    favoriteColor:
+                      S: tan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8b11e3e0-5272-4d44-8b2b-13daa540e86f
+                    firstName:
+                      S: Kattie
+                    lastName:
+                      S: Will
+                    shoeSize:
+                      "N": 6.9
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7a7df578-144f-4b30-ba58-a1d107a84528
+                    firstName:
+                      S: Beth
+                    lastName:
+                      S: Morissette
+                    shoeSize:
+                      "N": 2.4000000000000004
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d5ad8ba6-7171-45c7-864f-6ebc7e132083
+                    firstName:
+                      S: Mozelle
+                    lastName:
+                      S: Quitzon
+                    shoeSize:
+                      "N": 21.200000000000003
+                    favoriteColor:
+                      S: turquoise
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 9e6d4305-d84d-442b-8014-7d5612f253c2
+                    firstName:
+                      S: Vivianne
+                    lastName:
+                      S: Kuhn
+                    shoeSize:
+                      "N": 22.200000000000003
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7ae35596-4fb4-4c7e-85c0-fb69f67257a6
+                    firstName:
+                      S: Arno
+                    lastName:
+                      S: Stracke
+                    shoeSize:
+                      "N": 19.400000000000002
+                    favoriteColor:
+                      S: plum
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ccc337ab-e9d3-40a3-ae51-e3df92fa9c05
+                    firstName:
+                      S: Jakob
+                    lastName:
+                      S: Spencer
+                    shoeSize:
+                      "N": 3
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: cf51f492-e006-4a61-8a3f-8f9e0301665f
+                    firstName:
+                      S: Willard
+                    lastName:
+                      S: Hudson
+                    shoeSize:
+                      "N": 20
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 715d8e26-ba96-4bae-95f4-53e5bd8a5d99
+                    firstName:
+                      S: Elmore
+                    lastName:
+                      S: Daugherty
+                    shoeSize:
+                      "N": 21.200000000000003
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4f327b1b-e04b-472e-a084-e194c870e909
+                    firstName:
+                      S: Arne
+                    lastName:
+                      S: Hintz
+                    shoeSize:
+                      "N": 16.5
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d2519f78-0c96-47ae-9b4b-c6ff1341e73f
+                    firstName:
+                      S: Glen
+                    lastName:
+                      S: Schuppe
+                    shoeSize:
+                      "N": 4.4
+                    favoriteColor:
+                      S: tan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5de59985-3030-4e59-87d6-458dbd4ca813
+                    firstName:
+                      S: Darwin
+                    lastName:
+                      S: Wilderman
+                    shoeSize:
+                      "N": 16.6
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8844e587-3609-4bed-baa8-3709b86076cc
+                    firstName:
+                      S: Martina
+                    lastName:
+                      S: Klocko
+                    shoeSize:
+                      "N": 21.200000000000003
+                    favoriteColor:
+                      S: magenta
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2db08d46-7709-4646-bc7a-0eaaa3bc8df1
+                    firstName:
+                      S: Paul
+                    lastName:
+                      S: Reichert
+                    shoeSize:
+                      "N": 24.200000000000003
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8c8bef7b-209b-4192-8d2a-208b272013c0
+                    firstName:
+                      S: Emiliano
+                    lastName:
+                      S: Moen
+                    shoeSize:
+                      "N": 4.800000000000001
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 82c64da4-9479-4fb6-88e6-b7db590f795e
+                    firstName:
+                      S: Constantin
+                    lastName:
+                      S: Bailey
+                    shoeSize:
+                      "N": 2.8000000000000003
+                    favoriteColor:
+                      S: olive
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0ed9f881-d0ad-40f7-a2ad-9a8f0ef386d0
+                    firstName:
+                      S: Lavina
+                    lastName:
+                      S: Gulgowski
+                    shoeSize:
+                      "N": 9.8
+                    favoriteColor:
+                      S: plum
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b5bdce36-4897-4adc-b16a-f31a7018a215
+                    firstName:
+                      S: Jamie
+                    lastName:
+                      S: Kassulke
+                    shoeSize:
+                      "N": 17.900000000000002
+                    favoriteColor:
+                      S: ivory
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f5868916-95ac-4784-87a7-7d9ac3348291
+                    firstName:
+                      S: Davion
+                    lastName:
+                      S: Anderson
+                    shoeSize:
+                      "N": 20.900000000000002
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5b7bfbe4-af66-48be-ae04-0dea72fa53c2
+                    firstName:
+                      S: Wava
+                    lastName:
+                      S: Sipes
+                    shoeSize:
+                      "N": 6.1000000000000005
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6a50c642-8a38-41bb-a814-ee76a49c88ca
+                    firstName:
+                      S: Felicia
+                    lastName:
+                      S: Hand
+                    shoeSize:
+                      "N": 18.2
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b168935f-586f-4c11-bc72-096202dca357
+                    firstName:
+                      S: Dylan
+                    lastName:
+                      S: West
+                    shoeSize:
+                      "N": 12.600000000000001
+                    favoriteColor:
+                      S: olive
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e21b1d3b-2221-4224-8a40-787d8a871730
+                    firstName:
+                      S: Sadie
+                    lastName:
+                      S: Sawayn
+                    shoeSize:
+                      "N": 2.6
+                    favoriteColor:
+                      S: blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: df356891-0280-44ed-a2ee-91c06383f522
+                    firstName:
+                      S: Amalia
+                    lastName:
+                      S: Rowe
+                    shoeSize:
+                      "N": 17.2
+                    favoriteColor:
+                      S: red
+        physicalResourceId: initDBResourceBatch3
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch3/Resource/Default
+  initDBResourceBatch4657AAD39:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6e3e3bae-097a-44f9-ace3-f327f2dd5bbe
+                    firstName:
+                      S: Jovani
+                    lastName:
+                      S: Larkin
+                    shoeSize:
+                      "N": 7.9
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d46c61ba-ef0f-4490-a52a-41f646e84a8f
+                    firstName:
+                      S: Leora
+                    lastName:
+                      S: Nicolas
+                    shoeSize:
+                      "N": 21.400000000000002
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2cf80ffb-0332-4f24-83cb-5b3d55f5c71b
+                    firstName:
+                      S: Reece
+                    lastName:
+                      S: Strosin
+                    shoeSize:
+                      "N": 20.6
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8969b24d-e6fb-4837-86e8-4ea72c3bfc5b
+                    firstName:
+                      S: Mattie
+                    lastName:
+                      S: Kohler
+                    shoeSize:
+                      "N": 22.8
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 95d3b114-f90f-4f75-b0c4-966ac5dfe2b2
+                    firstName:
+                      S: Cordelia
+                    lastName:
+                      S: Bode
+                    shoeSize:
+                      "N": 6.6000000000000005
+                    favoriteColor:
+                      S: green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 9b332312-22fb-4250-a86f-7100fa4e4fcb
+                    firstName:
+                      S: Javonte
+                    lastName:
+                      S: Nienow
+                    shoeSize:
+                      "N": 2
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3bffc1b7-375f-4a4c-88e7-27cdeeebc6d7
+                    firstName:
+                      S: Joey
+                    lastName:
+                      S: Lang
+                    shoeSize:
+                      "N": 6.300000000000001
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 51fc9411-918c-4ac0-bc77-b6709c4fdffc
+                    firstName:
+                      S: Joshuah
+                    lastName:
+                      S: Haley
+                    shoeSize:
+                      "N": 22.200000000000003
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 244ea0c2-be41-452d-bb9e-f45095765dd2
+                    firstName:
+                      S: Leonora
+                    lastName:
+                      S: Bergnaum
+                    shoeSize:
+                      "N": 20.5
+                    favoriteColor:
+                      S: turquoise
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 412eaece-0818-4700-87bb-cf40f45a685a
+                    firstName:
+                      S: Arnulfo
+                    lastName:
+                      S: Ratke
+                    shoeSize:
+                      "N": 24
+                    favoriteColor:
+                      S: black
+              - PutRequest:
+                  Item:
+                    id:
+                      S: daab538c-3172-4b93-8650-f3f33f50cfc0
+                    firstName:
+                      S: Conor
+                    lastName:
+                      S: Moen
+                    shoeSize:
+                      "N": 3.1
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5cfaecc3-25ee-4b43-af4d-602559ef36ef
+                    firstName:
+                      S: Zelda
+                    lastName:
+                      S: Douglas
+                    shoeSize:
+                      "N": 11.600000000000001
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a93f3e04-4cb0-4f4f-9c50-d8841249bfa6
+                    firstName:
+                      S: Daniella
+                    lastName:
+                      S: Mitchell
+                    shoeSize:
+                      "N": 21.700000000000003
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 03262741-cf94-4331-8a77-4e9fd267892a
+                    firstName:
+                      S: Pearline
+                    lastName:
+                      S: Haley
+                    shoeSize:
+                      "N": 3.2
+                    favoriteColor:
+                      S: tan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 14425188-e62a-47af-a238-5bc99f35fd41
+                    firstName:
+                      S: Cleveland
+                    lastName:
+                      S: Orn
+                    shoeSize:
+                      "N": 17.6
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 21c74ea1-cd1b-4e4f-8ff1-b362010dbd19
+                    firstName:
+                      S: Davin
+                    lastName:
+                      S: Erdman
+                    shoeSize:
+                      "N": 10
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4da7a3d8-d4cf-4ef6-9ff8-6c5e00029af5
+                    firstName:
+                      S: Andy
+                    lastName:
+                      S: Jacobs
+                    shoeSize:
+                      "N": 20.700000000000003
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d2b07a55-cba1-4749-8043-9bd6fe0dbb7f
+                    firstName:
+                      S: Broderick
+                    lastName:
+                      S: Hand
+                    shoeSize:
+                      "N": 5.4
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b65e055a-3eed-4b82-8dc2-7a6f4b59745d
+                    firstName:
+                      S: Ida
+                    lastName:
+                      S: Dickens
+                    shoeSize:
+                      "N": 20.3
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3f3ba1d9-54ed-4a5e-a094-b140215624ca
+                    firstName:
+                      S: Zella
+                    lastName:
+                      S: Buckridge
+                    shoeSize:
+                      "N": 14.200000000000001
+                    favoriteColor:
+                      S: plum
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d959460d-02dc-46e1-ab46-0dd0a852bac9
+                    firstName:
+                      S: Amelia
+                    lastName:
+                      S: Batz
+                    shoeSize:
+                      "N": 11.700000000000001
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 21050675-3c6b-4930-a7a8-3ec65262e890
+                    firstName:
+                      S: Beaulah
+                    lastName:
+                      S: Abbott
+                    shoeSize:
+                      "N": 12.5
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5c673a94-380e-4679-af3b-927a4bb49a26
+                    firstName:
+                      S: Lew
+                    lastName:
+                      S: Hirthe
+                    shoeSize:
+                      "N": 16.1
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f6c86400-e00d-4e88-8692-9ff4d97527e7
+                    firstName:
+                      S: Virgie
+                    lastName:
+                      S: Wolf
+                    shoeSize:
+                      "N": 12.100000000000001
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4e64b0c9-3d92-4e15-a64f-c113c0074667
+                    firstName:
+                      S: Judah
+                    lastName:
+                      S: Lind
+                    shoeSize:
+                      "N": 15.200000000000001
+                    favoriteColor:
+                      S: fuchsia
+        physicalResourceId: initDBResourceBatch4
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch4/Resource/Default
+  initDBResourceBatch5DA0451A2:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7248af31-6d83-455d-a393-bc8f9eb3b90d
+                    firstName:
+                      S: Greyson
+                    lastName:
+                      S: Steuber
+                    shoeSize:
+                      "N": 4.6000000000000005
+                    favoriteColor:
+                      S: azure
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6dc95d90-7c5e-4cb4-963e-6e3633427f09
+                    firstName:
+                      S: Selina
+                    lastName:
+                      S: Nader
+                    shoeSize:
+                      "N": 5.9
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 96c4cd25-a3c7-426b-afa7-19c208afa30d
+                    firstName:
+                      S: Viola
+                    lastName:
+                      S: Kunde
+                    shoeSize:
+                      "N": 22.700000000000003
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: dfe546da-63dd-4df7-98e0-d1214102c9cb
+                    firstName:
+                      S: Elva
+                    lastName:
+                      S: Boyle
+                    shoeSize:
+                      "N": 1.6
+                    favoriteColor:
+                      S: ivory
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e1183eec-4570-4584-bb6c-05d221c824b9
+                    firstName:
+                      S: Carrie
+                    lastName:
+                      S: Kertzmann
+                    shoeSize:
+                      "N": 2.2
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3a040754-71c2-4ada-9f3d-bcffe4e852cd
+                    firstName:
+                      S: Cleve
+                    lastName:
+                      S: Larson
+                    shoeSize:
+                      "N": 14.9
+                    favoriteColor:
+                      S: blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8c7bbbb3-df47-4323-9b78-f6d2067f31db
+                    firstName:
+                      S: Jean
+                    lastName:
+                      S: Howe
+                    shoeSize:
+                      "N": 7.7
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 16836748-6c9d-4095-9d6e-282f5791c337
+                    firstName:
+                      S: Leonardo
+                    lastName:
+                      S: Mohr
+                    shoeSize:
+                      "N": 8.5
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f3a846e0-6cef-4942-a8e4-2d57346e8745
+                    firstName:
+                      S: Drake
+                    lastName:
+                      S: Cronin
+                    shoeSize:
+                      "N": 10
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6cecae67-6db6-45eb-b253-08fa7994516a
+                    firstName:
+                      S: Juliet
+                    lastName:
+                      S: Kovacek
+                    shoeSize:
+                      "N": 14.4
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 312157d8-6ea5-43d3-ac08-ec878b307a19
+                    firstName:
+                      S: Imani
+                    lastName:
+                      S: Will
+                    shoeSize:
+                      "N": 3.3000000000000003
+                    favoriteColor:
+                      S: magenta
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5efcd705-b1e1-4e38-924a-ab9091d2c43e
+                    firstName:
+                      S: Lucy
+                    lastName:
+                      S: Toy
+                    shoeSize:
+                      "N": 18.2
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f17ca277-fd59-45ec-92e5-6cbbfebc000d
+                    firstName:
+                      S: Luisa
+                    lastName:
+                      S: White
+                    shoeSize:
+                      "N": 9.8
+                    favoriteColor:
+                      S: lavender
+              - PutRequest:
+                  Item:
+                    id:
+                      S: cc5dfe45-0b17-4863-8c2d-d901e17f0ff6
+                    firstName:
+                      S: Remington
+                    lastName:
+                      S: Mueller
+                    shoeSize:
+                      "N": 5.5
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5e4c7f3d-7f5f-4012-8fa4-9fba90c3ae35
+                    firstName:
+                      S: Brando
+                    lastName:
+                      S: Sipes
+                    shoeSize:
+                      "N": 13.100000000000001
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 80c39f91-0d7f-423e-a36e-528cad5cc9b5
+                    firstName:
+                      S: Dakota
+                    lastName:
+                      S: Homenick
+                    shoeSize:
+                      "N": 15.3
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 33024076-505e-4406-ad4a-bff2b7a42073
+                    firstName:
+                      S: Kip
+                    lastName:
+                      S: Mante
+                    shoeSize:
+                      "N": 17.3
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0942d12b-77d8-4901-b251-3a56b0b5bf8f
+                    firstName:
+                      S: Angelita
+                    lastName:
+                      S: Windler
+                    shoeSize:
+                      "N": 21.8
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: aa7fcf92-c06e-443b-9dbd-b7acb4dbecef
+                    firstName:
+                      S: Corbin
+                    lastName:
+                      S: Hills
+                    shoeSize:
+                      "N": 11.9
+                    favoriteColor:
+                      S: lavender
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 28e136e1-20f1-4a66-a3a9-e25a15e2f2fb
+                    firstName:
+                      S: Asia
+                    lastName:
+                      S: Ernser
+                    shoeSize:
+                      "N": 2.9000000000000004
+                    favoriteColor:
+                      S: fuchsia
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d65b6b5c-4fff-46a4-bfff-920c558bd919
+                    firstName:
+                      S: Jacklyn
+                    lastName:
+                      S: Kozey
+                    shoeSize:
+                      "N": 22.1
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: cab02b9e-45fd-4d46-a6be-fe9afa81c38e
+                    firstName:
+                      S: Moshe
+                    lastName:
+                      S: Greenholt
+                    shoeSize:
+                      "N": 14.3
+                    favoriteColor:
+                      S: cyan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 38f5b27e-ad0d-45b1-b7b0-a574bbdf6b19
+                    firstName:
+                      S: Karolann
+                    lastName:
+                      S: Hoeger
+                    shoeSize:
+                      "N": 14.200000000000001
+                    favoriteColor:
+                      S: black
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2136fc71-0867-4ae0-8b86-1468b081002b
+                    firstName:
+                      S: Arianna
+                    lastName:
+                      S: Sauer
+                    shoeSize:
+                      "N": 22.700000000000003
+                    favoriteColor:
+                      S: turquoise
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 291ff29b-f661-44b7-b47e-a6020f349379
+                    firstName:
+                      S: Amani
+                    lastName:
+                      S: Feest
+                    shoeSize:
+                      "N": 17.900000000000002
+                    favoriteColor:
+                      S: fuchsia
+        physicalResourceId: initDBResourceBatch5
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch5/Resource/Default
+  initDBResourceBatch65A25E582:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 77ee8b2a-e551-41e0-ac54-e24b59153c54
+                    firstName:
+                      S: Tara
+                    lastName:
+                      S: Grady
+                    shoeSize:
+                      "N": 13.9
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 1e73b07b-3347-46cd-8878-49c660df1132
+                    firstName:
+                      S: Heber
+                    lastName:
+                      S: Jacobs
+                    shoeSize:
+                      "N": 24.900000000000002
+                    favoriteColor:
+                      S: black
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b34dbe93-eea3-453a-974c-e6c3ae0b633d
+                    firstName:
+                      S: Geovany
+                    lastName:
+                      S: Thompson
+                    shoeSize:
+                      "N": 9.5
+                    favoriteColor:
+                      S: green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6c2581dd-9e22-4041-a56a-1c53f3072375
+                    firstName:
+                      S: Josefa
+                    lastName:
+                      S: Simonis
+                    shoeSize:
+                      "N": 10.5
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a51bd179-3c00-43c9-9bd7-9c5d1680bf11
+                    firstName:
+                      S: Fabian
+                    lastName:
+                      S: Fay
+                    shoeSize:
+                      "N": 7
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ad7f7567-7656-4907-ae29-139a5dd8fb82
+                    firstName:
+                      S: Dax
+                    lastName:
+                      S: Collins
+                    shoeSize:
+                      "N": 13.700000000000001
+                    favoriteColor:
+                      S: tan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ec258ce8-40b5-45b4-94ba-567346facdce
+                    firstName:
+                      S: Allie
+                    lastName:
+                      S: Schiller
+                    shoeSize:
+                      "N": 20.3
+                    favoriteColor:
+                      S: olive
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 45f09c8e-862c-46f2-bc87-51c1fb1af75a
+                    firstName:
+                      S: Ryley
+                    lastName:
+                      S: Bradtke
+                    shoeSize:
+                      "N": 4.800000000000001
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0ac4c862-4ef2-4195-b3ed-1ea69ea1e228
+                    firstName:
+                      S: Myra
+                    lastName:
+                      S: Anderson
+                    shoeSize:
+                      "N": 22.3
+                    favoriteColor:
+                      S: tan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 04cb07bf-67da-403b-b12d-721f689585b0
+                    firstName:
+                      S: Major
+                    lastName:
+                      S: Runte
+                    shoeSize:
+                      "N": 11.3
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7a9ef4a3-fec1-45f8-927a-11e5b2fda9ec
+                    firstName:
+                      S: Oswaldo
+                    lastName:
+                      S: Casper
+                    shoeSize:
+                      "N": 23.8
+                    favoriteColor:
+                      S: tan
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 896ddb2d-9156-4524-978c-5651781a6730
+                    firstName:
+                      S: Frederic
+                    lastName:
+                      S: Cormier
+                    shoeSize:
+                      "N": 16.400000000000002
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: fc064be2-7718-43a5-a66c-68635af83c29
+                    firstName:
+                      S: Nels
+                    lastName:
+                      S: Bailey
+                    shoeSize:
+                      "N": 2.5
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: cc01a13c-f8fc-4e7a-add3-50942c735ca5
+                    firstName:
+                      S: Preston
+                    lastName:
+                      S: Jerde
+                    shoeSize:
+                      "N": 8.1
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ad712769-e5de-4789-a035-ad212c3e13bb
+                    firstName:
+                      S: Jules
+                    lastName:
+                      S: Rolfson
+                    shoeSize:
+                      "N": 20.1
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 605b3dde-a63f-4714-8e20-77f04d2c6eb5
+                    firstName:
+                      S: Maggie
+                    lastName:
+                      S: Erdman
+                    shoeSize:
+                      "N": 20.8
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5bf606e8-233f-4f5b-ba12-c58c4e1cd76b
+                    firstName:
+                      S: Reagan
+                    lastName:
+                      S: Dicki
+                    shoeSize:
+                      "N": 24.3
+                    favoriteColor:
+                      S: green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e7611d4e-6bd9-4966-9eb5-175479a15d26
+                    firstName:
+                      S: Kareem
+                    lastName:
+                      S: Anderson
+                    shoeSize:
+                      "N": 5.1000000000000005
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 707cdec3-29a1-42e3-8e4e-65b372eaf512
+                    firstName:
+                      S: Rashad
+                    lastName:
+                      S: Quigley
+                    shoeSize:
+                      "N": 23.200000000000003
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 87afdf86-903a-451d-bc07-482a521e7199
+                    firstName:
+                      S: Florine
+                    lastName:
+                      S: Boehm
+                    shoeSize:
+                      "N": 21.5
+                    favoriteColor:
+                      S: green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 277f4686-4176-4cc6-ac7a-d92e00085edb
+                    firstName:
+                      S: Kaela
+                    lastName:
+                      S: Goyette
+                    shoeSize:
+                      "N": 11
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ff3907e6-5e6e-4ccb-8be7-8b08e9c173d9
+                    firstName:
+                      S: Juwan
+                    lastName:
+                      S: Paucek
+                    shoeSize:
+                      "N": 8.700000000000001
+                    favoriteColor:
+                      S: lavender
+              - PutRequest:
+                  Item:
+                    id:
+                      S: eea14d98-6afe-4799-9457-87fe69e24eef
+                    firstName:
+                      S: Chanel
+                    lastName:
+                      S: Hyatt
+                    shoeSize:
+                      "N": 15.9
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 548ffe53-49e5-4ae4-b5df-cf32292742b3
+                    firstName:
+                      S: Nils
+                    lastName:
+                      S: Senger
+                    shoeSize:
+                      "N": 12.3
+                    favoriteColor:
+                      S: blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 816e7021-8dd0-4bb8-8041-9d85fe8579aa
+                    firstName:
+                      S: Linwood
+                    lastName:
+                      S: O'Kon
+                    shoeSize:
+                      "N": 7.800000000000001
+                    favoriteColor:
+                      S: tan
+        physicalResourceId: initDBResourceBatch6
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch6/Resource/Default
+  initDBResourceBatch7C231D2EC:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 355fdcf9-c6b1-40e7-af10-75f24712b69a
+                    firstName:
+                      S: Enrico
+                    lastName:
+                      S: Vandervort
+                    shoeSize:
+                      "N": 11.4
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f7d7754e-8233-4a01-ada0-e74a36a81584
+                    firstName:
+                      S: Henri
+                    lastName:
+                      S: Bayer
+                    shoeSize:
+                      "N": 20.6
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: acf9f5ef-3a1c-4810-8740-8f246e70f3d1
+                    firstName:
+                      S: Golda
+                    lastName:
+                      S: Renner
+                    shoeSize:
+                      "N": 6.4
+                    favoriteColor:
+                      S: fuchsia
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 8e318090-5a90-4b90-b276-4bfa5edd89cf
+                    firstName:
+                      S: Sylvia
+                    lastName:
+                      S: Powlowski
+                    shoeSize:
+                      "N": 20.5
+                    favoriteColor:
+                      S: lavender
+              - PutRequest:
+                  Item:
+                    id:
+                      S: efa2e490-7232-4cbd-896b-9876030e2070
+                    firstName:
+                      S: Mavis
+                    lastName:
+                      S: Ondricka
+                    shoeSize:
+                      "N": 20.1
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 999afcbc-4f09-4e68-ba35-8899ac606d6b
+                    firstName:
+                      S: Jerome
+                    lastName:
+                      S: Mitchell
+                    shoeSize:
+                      "N": 14.9
+                    favoriteColor:
+                      S: black
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0077eb4d-c560-46b8-bb49-50b8237b9f85
+                    firstName:
+                      S: Brenda
+                    lastName:
+                      S: Bergnaum
+                    shoeSize:
+                      "N": 18.1
+                    favoriteColor:
+                      S: magenta
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7f80ead5-7403-4141-a59a-0e9622dedf86
+                    firstName:
+                      S: Antonina
+                    lastName:
+                      S: Ratke
+                    shoeSize:
+                      "N": 6.1000000000000005
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f2011810-aa35-4c26-80d0-98c2d8a5cdb8
+                    firstName:
+                      S: Gisselle
+                    lastName:
+                      S: Halvorson
+                    shoeSize:
+                      "N": 15.3
+                    favoriteColor:
+                      S: violet
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7f4ec803-03c1-4430-b933-442221f3202d
+                    firstName:
+                      S: Ana
+                    lastName:
+                      S: Nolan
+                    shoeSize:
+                      "N": 15.5
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5042d246-5026-4419-8943-9d57d3abc6b7
+                    firstName:
+                      S: Shaina
+                    lastName:
+                      S: Greenfelder
+                    shoeSize:
+                      "N": 14.9
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ea99fe7a-c1c7-46e2-ae0e-58ae17bfa257
+                    firstName:
+                      S: Craig
+                    lastName:
+                      S: Hane
+                    shoeSize:
+                      "N": 24.400000000000002
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 100056b3-66c9-4a2b-ab49-aba0857203bd
+                    firstName:
+                      S: Constantin
+                    lastName:
+                      S: Bradtke
+                    shoeSize:
+                      "N": 3.1
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 541f6f07-89a6-4b7d-9fd4-53e0ff61366f
+                    firstName:
+                      S: Lia
+                    lastName:
+                      S: Oberbrunner
+                    shoeSize:
+                      "N": 1.7000000000000002
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f86c5b82-a69f-4034-8eef-ffca01c5daa6
+                    firstName:
+                      S: Demond
+                    lastName:
+                      S: Langworth
+                    shoeSize:
+                      "N": 3.6
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e64071e7-6c25-4cba-ae40-9fee865faf10
+                    firstName:
+                      S: Zane
+                    lastName:
+                      S: Larson
+                    shoeSize:
+                      "N": 18.400000000000002
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 52d50d43-d8a3-4d59-ad59-fc3bf354c8e7
+                    firstName:
+                      S: Ollie
+                    lastName:
+                      S: Huels
+                    shoeSize:
+                      "N": 8.4
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2b56f755-baac-4b9c-a1eb-a50c8c46a408
+                    firstName:
+                      S: Jammie
+                    lastName:
+                      S: Hane
+                    shoeSize:
+                      "N": 5.300000000000001
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6680f743-3036-40ad-b1c3-4ee791f613a7
+                    firstName:
+                      S: Natalia
+                    lastName:
+                      S: Stanton
+                    shoeSize:
+                      "N": 13.600000000000001
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 89ee1588-1b3b-42a7-b2d0-8dd7e5f76d77
+                    firstName:
+                      S: Georgiana
+                    lastName:
+                      S: Runte
+                    shoeSize:
+                      "N": 21.5
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f5073b9b-0f9f-4fcd-b98e-abecc9d0d86b
+                    firstName:
+                      S: Kellen
+                    lastName:
+                      S: Stokes
+                    shoeSize:
+                      "N": 20.6
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f6494925-2ced-431b-9aee-4595df5be924
+                    firstName:
+                      S: Bonita
+                    lastName:
+                      S: Steuber
+                    shoeSize:
+                      "N": 23.8
+                    favoriteColor:
+                      S: salmon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6545b449-8b94-4149-b574-59fdb02d85aa
+                    firstName:
+                      S: Frederick
+                    lastName:
+                      S: Leuschke
+                    shoeSize:
+                      "N": 19.400000000000002
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: af929bae-44ed-4e13-85e6-e9de2d42d12b
+                    firstName:
+                      S: Deshaun
+                    lastName:
+                      S: Moen
+                    shoeSize:
+                      "N": 13.9
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: cce771b7-deb5-4cae-9023-c977a5c20cc5
+                    firstName:
+                      S: Myah
+                    lastName:
+                      S: Pacocha
+                    shoeSize:
+                      "N": 7.2
+                    favoriteColor:
+                      S: tan
+        physicalResourceId: initDBResourceBatch7
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch7/Resource/Default
+  initDBResourceBatch884D1685F:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: aa0701e5-cc4e-4c8c-a817-cb5169982953
+                    firstName:
+                      S: Julie
+                    lastName:
+                      S: Kemmer
+                    shoeSize:
+                      "N": 6.300000000000001
+                    favoriteColor:
+                      S: turquoise
+              - PutRequest:
+                  Item:
+                    id:
+                      S: dc449ffc-3841-49d9-9ee8-501b04bb70f1
+                    firstName:
+                      S: Orval
+                    lastName:
+                      S: Brown
+                    shoeSize:
+                      "N": 25
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a10efe20-8779-4ea8-a2e7-a8fcbfc2750c
+                    firstName:
+                      S: Marley
+                    lastName:
+                      S: Sporer
+                    shoeSize:
+                      "N": 22.3
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3ec2fb2d-8505-4703-8b81-5e91c2472c9b
+                    firstName:
+                      S: Juliana
+                    lastName:
+                      S: Hermiston
+                    shoeSize:
+                      "N": 13.9
+                    favoriteColor:
+                      S: turquoise
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f9ba9450-c3bc-4fd1-87fd-03052a603769
+                    firstName:
+                      S: Vicente
+                    lastName:
+                      S: Doyle
+                    shoeSize:
+                      "N": 12.3
+                    favoriteColor:
+                      S: black
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4882c143-4a87-43e8-a9fb-966575de4817
+                    firstName:
+                      S: Cody
+                    lastName:
+                      S: Schmidt
+                    shoeSize:
+                      "N": 21.400000000000002
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d75fe81c-b487-4559-bdd1-b215ff35e2e6
+                    firstName:
+                      S: Rudy
+                    lastName:
+                      S: Upton
+                    shoeSize:
+                      "N": 23
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d3061d21-d4d6-469d-9833-0f0bae306fc4
+                    firstName:
+                      S: Gregg
+                    lastName:
+                      S: Skiles
+                    shoeSize:
+                      "N": 21.8
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: da5c536e-1b82-47b8-940c-b6e45c1a94f1
+                    firstName:
+                      S: Jasper
+                    lastName:
+                      S: Berge
+                    shoeSize:
+                      "N": 3.3000000000000003
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 23b370ff-0bb4-4b9f-b5b5-ae9c4eaee194
+                    firstName:
+                      S: Zelda
+                    lastName:
+                      S: Harris
+                    shoeSize:
+                      "N": 4.4
+                    favoriteColor:
+                      S: ivory
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a98f6085-cb72-4a17-ac91-774f515d38c4
+                    firstName:
+                      S: Baylee
+                    lastName:
+                      S: Pagac
+                    shoeSize:
+                      "N": 15.600000000000001
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c3d102cc-2ce1-4d49-94a7-2b2cfebaa134
+                    firstName:
+                      S: Narciso
+                    lastName:
+                      S: Sanford
+                    shoeSize:
+                      "N": 15.600000000000001
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5d877a73-9612-44a7-a7ad-b4cb0b8189f3
+                    firstName:
+                      S: Sharon
+                    lastName:
+                      S: D'Amore
+                    shoeSize:
+                      "N": 17.2
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 82a7a398-a27c-4b4c-b460-da3acca86d5e
+                    firstName:
+                      S: Imelda
+                    lastName:
+                      S: Lehner
+                    shoeSize:
+                      "N": 15.700000000000001
+                    favoriteColor:
+                      S: black
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 860564e4-09cf-4002-94e6-eb34a47bc1cd
+                    firstName:
+                      S: Howard
+                    lastName:
+                      S: Parisian
+                    shoeSize:
+                      "N": 6.2
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7729ebde-f6dc-4282-8232-771f669026c7
+                    firstName:
+                      S: Krystina
+                    lastName:
+                      S: Brown
+                    shoeSize:
+                      "N": 20.6
+                    favoriteColor:
+                      S: gold
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3612ccad-3457-4ad1-aac3-1f621187415e
+                    firstName:
+                      S: Lucas
+                    lastName:
+                      S: Hermiston
+                    shoeSize:
+                      "N": 5.300000000000001
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3bd71c03-8b5f-4d6d-9218-3dc61d48f2c5
+                    firstName:
+                      S: Grace
+                    lastName:
+                      S: Ebert
+                    shoeSize:
+                      "N": 22.200000000000003
+                    favoriteColor:
+                      S: maroon
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 239cb8f1-c308-434b-a3a6-8ead9af48c42
+                    firstName:
+                      S: Chelsea
+                    lastName:
+                      S: Stanton
+                    shoeSize:
+                      "N": 17.1
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 364018c3-0217-4019-b78c-41cf8f211ee4
+                    firstName:
+                      S: Aurelia
+                    lastName:
+                      S: Steuber
+                    shoeSize:
+                      "N": 23
+                    favoriteColor:
+                      S: azure
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6927bfa7-03ac-4c7b-9bdb-7bf7f620e630
+                    firstName:
+                      S: Adolph
+                    lastName:
+                      S: Parker
+                    shoeSize:
+                      "N": 17
+                    favoriteColor:
+                      S: green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: f8501db2-88d5-43ea-9580-a1edfb81b38a
+                    firstName:
+                      S: Abe
+                    lastName:
+                      S: Dietrich
+                    shoeSize:
+                      "N": 19.8
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 34daedd3-cda1-4c29-b4e9-63b8724f0fb1
+                    firstName:
+                      S: Hollie
+                    lastName:
+                      S: Huels
+                    shoeSize:
+                      "N": 4.4
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3fb4dc66-fa44-41dc-9ff7-c826a5999350
+                    firstName:
+                      S: Maeve
+                    lastName:
+                      S: O'Keefe
+                    shoeSize:
+                      "N": 4.9
+                    favoriteColor:
+                      S: silver
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 5b0843e0-d912-4565-a6e6-eaaa0bc9c582
+                    firstName:
+                      S: Hector
+                    lastName:
+                      S: Legros
+                    shoeSize:
+                      "N": 14.3
+                    favoriteColor:
+                      S: turquoise
+        physicalResourceId: initDBResourceBatch8
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch8/Resource/Default
+  initDBResourceBatch9587A5D15:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create:
+        service: DynamoDB
+        action: batchWriteItem
+        parameters:
+          RequestItems:
+            friends:
+              - PutRequest:
+                  Item:
+                    id:
+                      S: eedcf0fb-6eb1-46c5-a40d-f25172275805
+                    firstName:
+                      S: Porter
+                    lastName:
+                      S: Lesch
+                    shoeSize:
+                      "N": 13.700000000000001
+                    favoriteColor:
+                      S: indigo
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 1b57ac1e-28da-4ac5-9325-eb103e265a4c
+                    firstName:
+                      S: Lauriane
+                    lastName:
+                      S: Macejkovic
+                    shoeSize:
+                      "N": 4.1000000000000005
+                    favoriteColor:
+                      S: yellow
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3de58a5e-4704-415d-9ce4-47bf8fb050a0
+                    firstName:
+                      S: Elyse
+                    lastName:
+                      S: Towne
+                    shoeSize:
+                      "N": 14.5
+                    favoriteColor:
+                      S: mint green
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 94f2c8da-0489-4db8-a998-4460d19545cc
+                    firstName:
+                      S: Laurine
+                    lastName:
+                      S: Bradtke
+                    shoeSize:
+                      "N": 13.8
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2bc5f7a1-17aa-4fff-bfd6-0c6620204c37
+                    firstName:
+                      S: Bo
+                    lastName:
+                      S: Wilkinson
+                    shoeSize:
+                      "N": 1.8
+                    favoriteColor:
+                      S: olive
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6bff2596-61d0-4594-998b-a5aa0a684409
+                    firstName:
+                      S: Rudy
+                    lastName:
+                      S: King
+                    shoeSize:
+                      "N": 13.100000000000001
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 23f84742-fbe9-4291-a7d7-d0582090e9a7
+                    firstName:
+                      S: Richmond
+                    lastName:
+                      S: Kozey
+                    shoeSize:
+                      "N": 2
+                    favoriteColor:
+                      S: grey
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0a8cb71c-a460-45b9-b363-e2d3d04a69e4
+                    firstName:
+                      S: Brannon
+                    lastName:
+                      S: Carter
+                    shoeSize:
+                      "N": 7
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 0355c296-aa59-4a9e-8d63-fc86e260e583
+                    firstName:
+                      S: Lucy
+                    lastName:
+                      S: Marks
+                    shoeSize:
+                      "N": 5.2
+                    favoriteColor:
+                      S: red
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 3d2ebf8d-dc38-40f8-8bd2-eb127db708c2
+                    firstName:
+                      S: Velma
+                    lastName:
+                      S: Stroman
+                    shoeSize:
+                      "N": 17
+                    favoriteColor:
+                      S: lime
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 7885f614-d401-4c66-a7bf-f4918a250b56
+                    firstName:
+                      S: Leslie
+                    lastName:
+                      S: Labadie
+                    shoeSize:
+                      "N": 14.100000000000001
+                    favoriteColor:
+                      S: pink
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 2a14c9f5-106a-4d70-96db-d39ae9c09798
+                    firstName:
+                      S: Marilie
+                    lastName:
+                      S: Quitzon
+                    shoeSize:
+                      "N": 16.8
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: b55ee08a-36d4-4aae-9b49-9e23b7da2780
+                    firstName:
+                      S: Brandon
+                    lastName:
+                      S: Lynch
+                    shoeSize:
+                      "N": 10.4
+                    favoriteColor:
+                      S: teal
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4f00b911-bbe6-400c-b629-664be387c776
+                    firstName:
+                      S: Cathrine
+                    lastName:
+                      S: Gislason
+                    shoeSize:
+                      "N": 20.200000000000003
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: bea9f464-ba59-41b6-9b45-88954e549c32
+                    firstName:
+                      S: Serenity
+                    lastName:
+                      S: Krajcik
+                    shoeSize:
+                      "N": 8.6
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: c9eeb1ed-0717-4687-8a96-fffa2f8fbd61
+                    firstName:
+                      S: Philip
+                    lastName:
+                      S: Lubowitz
+                    shoeSize:
+                      "N": 21.5
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 09040a0d-2762-4059-b181-ea46fe3154c2
+                    firstName:
+                      S: Willa
+                    lastName:
+                      S: Koch
+                    shoeSize:
+                      "N": 15.600000000000001
+                    favoriteColor:
+                      S: sky blue
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 1030de76-aead-4acc-999e-a3d0ba4c3312
+                    firstName:
+                      S: Winnifred
+                    lastName:
+                      S: Schultz
+                    shoeSize:
+                      "N": 1.9000000000000001
+                    favoriteColor:
+                      S: olive
+              - PutRequest:
+                  Item:
+                    id:
+                      S: ceff720f-f0dc-4034-9d87-176ab91fa948
+                    firstName:
+                      S: Cade
+                    lastName:
+                      S: Jacobson
+                    shoeSize:
+                      "N": 15.100000000000001
+                    favoriteColor:
+                      S: orange
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 4f4cea8e-1ccb-47eb-bdfa-f22f15e6c737
+                    firstName:
+                      S: Ervin
+                    lastName:
+                      S: Stehr
+                    shoeSize:
+                      "N": 24.5
+                    favoriteColor:
+                      S: fuchsia
+              - PutRequest:
+                  Item:
+                    id:
+                      S: e3168878-143f-4ee2-853d-d8c7adfd0072
+                    firstName:
+                      S: Abe
+                    lastName:
+                      S: Rath
+                    shoeSize:
+                      "N": 23.900000000000002
+                    favoriteColor:
+                      S: purple
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 49213a75-62c2-4263-8aa4-64c43756b063
+                    firstName:
+                      S: Dana
+                    lastName:
+                      S: Sanford
+                    shoeSize:
+                      "N": 11.600000000000001
+                    favoriteColor:
+                      S: lavender
+              - PutRequest:
+                  Item:
+                    id:
+                      S: 6c3c34f6-7414-4ec8-a72c-6d5908c9dcbf
+                    firstName:
+                      S: Kameron
+                    lastName:
+                      S: Cassin
+                    shoeSize:
+                      "N": 1.8
+                    favoriteColor:
+                      S: white
+              - PutRequest:
+                  Item:
+                    id:
+                      S: d9b69dc5-2cad-4c37-ab44-26ea2ad1fae8
+                    firstName:
+                      S: Sasha
+                    lastName:
+                      S: Hackett
+                    shoeSize:
+                      "N": 12.700000000000001
+                    favoriteColor:
+                      S: orchid
+              - PutRequest:
+                  Item:
+                    id:
+                      S: a16adbb7-e6ab-4bd2-8458-71f17dcd6461
+                    firstName:
+                      S: Tressa
+                    lastName:
+                      S: Renner
+                    shoeSize:
+                      "N": 24.5
+                    favoriteColor:
+                      S: azure
+        physicalResourceId: initDBResourceBatch9
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: CdkDynamoCustomLoaderStack/initDBResourceBatch9/Resource/Default
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.19.0,@aws-cdk/assets=1.19.0,@aws-cdk/aws-applicationautoscaling=1.19.0,@aws-cdk/aws-autoscaling=1.19.0,@aws-cdk/aws-autoscaling-common=1.19.0,@aws-cdk/aws-autoscaling-hooktargets=1.19.0,@aws-cdk/aws-cloudformation=1.19.0,@aws-cdk/aws-cloudwatch=1.19.0,@aws-cdk/aws-dynamodb=1.19.0,@aws-cdk/aws-ec2=1.19.0,@aws-cdk/aws-ecr=1.19.0,@aws-cdk/aws-ecr-assets=1.19.0,@aws-cdk/aws-ecs=1.19.0,@aws-cdk/aws-elasticloadbalancingv2=1.19.0,@aws-cdk/aws-events=1.19.0,@aws-cdk/aws-iam=1.19.0,@aws-cdk/aws-kms=1.19.0,@aws-cdk/aws-lambda=1.19.0,@aws-cdk/aws-logs=1.19.0,@aws-cdk/aws-s3=1.19.0,@aws-cdk/aws-s3-assets=1.19.0,@aws-cdk/aws-servicediscovery=1.19.0,@aws-cdk/aws-sns=1.19.0,@aws-cdk/aws-sns-subscriptions=1.19.0,@aws-cdk/aws-sqs=1.19.0,@aws-cdk/aws-ssm=1.19.0,@aws-cdk/aws-stepfunctions=1.19.0,@aws-cdk/aws-stepfunctions-tasks=1.19.0,@aws-cdk/core=1.19.0,@aws-cdk/custom-resources=1.19.0,@aws-cdk/cx-api=1.19.0,@aws-cdk/region-info=1.19.0,jsii-runtime=node.js/v12.14.0
+    Condition: CDKMetadataAvailable
+Parameters:
+  AssetParameters3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413S3Bucket9D38CF31:
+    Type: String
+    Description: S3 bucket for asset "3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413"
+  AssetParameters3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413S3VersionKeyBA9C6356:
+    Type: String
+    Description: S3 key for asset version "3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413"
+  AssetParameters3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413ArtifactHashB2FF8129:
+    Type: String
+    Description: Artifact hash for asset "3b349cd79b049cde0f024dbf8b88bc417f93beb064772d3c501df391e5ed9413"
+Conditions:
+  CDKMetadataAvailable:
+    Fn::Or:
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-northeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ap-southeast-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - ca-central-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - cn-northwest-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-central-1
+      - Fn::Or:
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-north-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - eu-west-3
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - me-south-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - sa-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-east-2
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-1
+          - Fn::Equals:
+              - Ref: AWS::Region
+              - us-west-2
+

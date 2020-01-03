@@ -6,22 +6,33 @@
   },
   "scripts": {
     "build": "tsc",
-    "watch": "tsc -w",
+    "cdk": "cdk",
+    "lint": "eslint --ext .ts .",
     "test": "jest",
-    "cdk": "cdk"
+    "watch": "tsc -w"
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.19.0",
+    "@types/faker": "^4.1.8",
     "@types/jest": "^24.0.22",
-    "@types/node": "10.17.5",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
+    "@types/node": "^12.12.22",
+    "@typescript-eslint/eslint-plugin": "^2.14.0",
+    "@typescript-eslint/parser": "^2.14.0",
     "aws-cdk": "^1.19.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.1.0",
     "ts-node": "^8.1.0",
     "typescript": "~3.7.2"
   },
   "dependencies": {
+    "@aws-cdk/aws-dynamodb": "^1.19.0",
     "@aws-cdk/core": "^1.19.0",
+    "@aws-cdk/custom-resources": "^1.19.0",
+    "faker": "^4.1.0",
     "source-map-support": "^0.5.16"
   }
 }
