@@ -2,6 +2,8 @@
 
 Create a Dynamo table with CDK and load it with [faker](https://github.com/marak/Faker.js/) and a custom AWS resource.
 
+Read more about it on [dev.to](https://dev.to/elthrasher/exploring-aws-cdk-loading-dynamodb-with-custom-resources-jlf).
+
 ## Useful commands
 
 - `npm run build` compile typescript to js

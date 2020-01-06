@@ -17,12 +17,14 @@ export class CdkDynamoCustomLoaderStack extends Stack {
 
     const tableName = 'friends';
 
+    // Create a table
     new Table(this, 'FriendsTable', {
       tableName,
       partitionKey: { name: 'id', type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
+    // Add one item to the table.
     new AwsCustomResource(this, 'initDBResource', {
       onCreate: {
         service: 'DynamoDB',
@@ -31,10 +33,11 @@ export class CdkDynamoCustomLoaderStack extends Stack {
           TableName: tableName,
           Item: this.generateItem(),
         },
-        physicalResourceId: 'initDBResource',
+        physicalResourceId: 'initDBData',
       },
     });
 
+    // Add 25 items at a time ten times.
     for (let i = 0; i < 10; i++) {
       new AwsCustomResource(this, `initDBResourceBatch${i}`, {
         onCreate: {
@@ -45,7 +48,7 @@ export class CdkDynamoCustomLoaderStack extends Stack {
               [tableName]: this.generateBatch(),
             },
           },
-          physicalResourceId: `initDBResourceBatch${i}`,
+          physicalResourceId: `initDBDataBatch${i}`,
         },
       });
     }
