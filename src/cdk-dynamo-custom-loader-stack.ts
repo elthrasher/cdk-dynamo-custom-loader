@@ -1,6 +1,6 @@
 import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
-import { AwsCustomResource } from '@aws-cdk/custom-resources';
+import { AwsCustomResource, PhysicalResourceId } from '@aws-cdk/custom-resources';
 import { commerce, name, random } from 'faker';
 
 interface IFriend {
@@ -33,7 +33,7 @@ export class CdkDynamoCustomLoaderStack extends Stack {
           TableName: tableName,
           Item: this.generateItem(),
         },
-        physicalResourceId: 'initDBData',
+        physicalResourceId: PhysicalResourceId.of('initDBData'),
       },
     });
 
@@ -48,7 +48,7 @@ export class CdkDynamoCustomLoaderStack extends Stack {
               [tableName]: this.generateBatch(),
             },
           },
-          physicalResourceId: `initDBDataBatch${i}`,
+          physicalResourceId: PhysicalResourceId.of(`initDBDataBatch${i}`),
         },
       });
     }
