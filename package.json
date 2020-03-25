@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.27.0",
-    "@types/faker": "^4.1.10",
+    "@types/faker": "^4.1.11",
     "@types/jest": "^25.1.4",
     "@types/node": "^12.12.30",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
