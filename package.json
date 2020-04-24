@@ -33,6 +33,6 @@
     "@aws-cdk/core": "^1.27.0",
     "@aws-cdk/custom-resources": "^1.27.0",
     "faker": "^4.1.0",
-    "source-map-support": "^0.5.18"
+    "source-map-support": "^0.5.19"
   }
 }
