@@ -1,6 +1,6 @@
 import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
-import { AwsCustomResource, PhysicalResourceId } from '@aws-cdk/custom-resources';
+import { AwsCustomResource, PhysicalResourceId, AwsCustomResourcePolicy } from '@aws-cdk/custom-resources';
 import { commerce, name, random } from 'faker';
 
 interface IFriend {
@@ -18,7 +18,7 @@ export class CdkDynamoCustomLoaderStack extends Stack {
     const tableName = 'friends';
 
     // Create a table
-    new Table(this, 'FriendsTable', {
+    const table = new Table(this, 'FriendsTable', {
       tableName,
       partitionKey: { name: 'id', type: AttributeType.STRING },
       removalPolicy: RemovalPolicy.DESTROY,
@@ -35,6 +35,7 @@ export class CdkDynamoCustomLoaderStack extends Stack {
         },
         physicalResourceId: PhysicalResourceId.of('initDBData'),
       },
+      policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: [table.tableArn] }),
     });
 
     // Add 25 items at a time ten times.
@@ -50,6 +51,7 @@ export class CdkDynamoCustomLoaderStack extends Stack {
           },
           physicalResourceId: PhysicalResourceId.of(`initDBDataBatch${i}`),
         },
+        policy: AwsCustomResourcePolicy.fromSdkCalls({ resources: [table.tableArn] }),
       });
     }
   }
