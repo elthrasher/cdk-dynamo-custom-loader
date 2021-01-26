@@ -32,7 +32,7 @@
     "@aws-cdk/aws-dynamodb": "1.78.0",
     "@aws-cdk/core": "1.78.0",
     "@aws-cdk/custom-resources": "1.78.0",
-    "faker": "^5.1.0",
+    "faker": "^5.2.0",
     "source-map-support": "^0.5.19"
   }
 }
