@@ -1,6 +1,6 @@
 import { AttributeType, Table } from '@aws-cdk/aws-dynamodb';
 import { Construct, RemovalPolicy, Stack, StackProps } from '@aws-cdk/core';
-import { AwsCustomResource, PhysicalResourceId, AwsCustomResourcePolicy } from '@aws-cdk/custom-resources';
+import { AwsCustomResource, AwsCustomResourcePolicy, PhysicalResourceId } from '@aws-cdk/custom-resources';
 import { commerce, name, random } from 'faker';
 
 interface IFriend {
