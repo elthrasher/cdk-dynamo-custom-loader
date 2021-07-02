@@ -14,7 +14,7 @@
     "@aws-cdk/assert": "1.87.1",
     "@types/faker": "^5.5.6",
     "@types/jest": "^26.0.23",
-    "@types/node": "^15.12.5",
+    "@types/node": "^15.14.0",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
     "aws-cdk": "1.111.0",
